@@ -12,7 +12,6 @@ public class CamerFollow : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
-        Debug.Log("The selected index: " + GameManager.instance.CharIndex);
     }
 
     // Update is called once per frame

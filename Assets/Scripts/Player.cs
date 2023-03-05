@@ -19,7 +19,8 @@ public class Player : MonoBehaviour
     private string GROUND_TAG = "Ground";
     private string ENEMY_TAG = "Enemy";
     private bool isGrounded = true;
-
+    [SerializeField]
+    private AudioSource jumpSoundEffect;
     private void Awake()
     {
         mybody = GetComponent<Rigidbody2D>();
@@ -69,6 +70,7 @@ public class Player : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             isGrounded = false;
+            jumpSoundEffect.Play();
             mybody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
         }
     }
@@ -80,12 +82,18 @@ public class Player : MonoBehaviour
         }
         if (collision.gameObject.CompareTag(ENEMY_TAG))
         {
-            Destroy(gameObject);
+            DestroyAndGameOverSound();
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag(ENEMY_TAG))
-            Destroy(gameObject);
+            DestroyAndGameOverSound();
+    }
+
+    private void DestroyAndGameOverSound()
+    {
+        GameManager.instance.GameOverSoundEffect.Play();
+        Destroy(gameObject);
     }
 }

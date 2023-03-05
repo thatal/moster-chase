@@ -9,11 +9,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject[] characters;
     private int _charIndex;
+    [SerializeField]
+    private AudioSource gameOverSoundEffect;
     public int CharIndex
     {
         get { return _charIndex; }
         set { _charIndex = value; }
     }
+
+    public AudioSource GameOverSoundEffect { get => gameOverSoundEffect; set => gameOverSoundEffect = value; }
+
     private void Awake()
     {
         if (instance == null)
