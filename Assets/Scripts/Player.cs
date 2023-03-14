@@ -21,8 +21,13 @@ public class Player : MonoBehaviour
     private bool isGrounded = true;
     [SerializeField]
     private AudioSource jumpSoundEffect;
+    private bool playingInDesktop = true;
     private void Awake()
     {
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            playingInDesktop = false;
+        }
         mybody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
@@ -30,7 +35,11 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        MovementController.playerMovementButtonClicked += PlayerMovementButtonClickedListener;
+    }
+    private void OnDestroy()
+    {
+        MovementController.playerMovementButtonClicked -= PlayerMovementButtonClickedListener;
     }
 
     // Update is called once per frame
@@ -41,13 +50,16 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        PlayerJump();
+        PlayerJumpListener();
     }
 
     private void PlayerMoveKeyboard()
     {
-        movementX = Input.GetAxisRaw("Horizontal");
-        transform.position += new Vector3(movementX, 0f, 0f) * Time.deltaTime * moveForce;
+        if (playingInDesktop)
+        {
+            movementX = Input.GetAxisRaw("Horizontal");
+        }
+        MovePlayer();
     }
     void AnimatePlayer()
     {
@@ -65,15 +77,24 @@ public class Player : MonoBehaviour
 
         }
     }
-    void PlayerJump()
+    void PlayerJumpListener()
     {
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump"))
+        {
+            PlayerJumped();
+        }
+    }
+
+    private void PlayerJumped()
+    {
+        if (isGrounded)
         {
             isGrounded = false;
             jumpSoundEffect.Play();
             mybody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(GROUND_TAG))
@@ -95,5 +116,32 @@ public class Player : MonoBehaviour
     {
         GameManager.instance.GameOverSoundEffect.Play();
         Destroy(gameObject);
+    }
+
+    private void PlayerMovementButtonClickedListener(string buttonName)
+    {
+        Debug.Log(buttonName + " is pressed.");
+        switch (buttonName)
+        {
+            case "left":
+                movementX = -1;
+                MovePlayer();
+                break;
+            case "right":
+                movementX = 1;
+                MovePlayer();
+                break;
+            case "jump":
+                PlayerJumped();
+                break;
+            default:
+                movementX = 0;
+                break;
+        }
+    }
+    private void MovePlayer()
+    {
+        transform.position += new Vector3(movementX, 0f, 0f) * Time.deltaTime * moveForce;
+        AnimatePlayer();
     }
 }
