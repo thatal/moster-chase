@@ -115,6 +115,7 @@ public class Player : MonoBehaviour
     private void DestroyAndGameOverSound()
     {
         GameManager.instance.GameOverSoundEffect.Play();
+        ScoreManager.instance.saveScore();
         Destroy(gameObject);
     }
 
