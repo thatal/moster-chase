@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Enemy
+  - GameButtons
+  - GameOverUI
   layers:
   - Default
   - TransparentFX
@@ -51,4 +53,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 192585651
+    locked: 0
+  - name: Gameover
+    uniqueID: 4284895989
     locked: 0

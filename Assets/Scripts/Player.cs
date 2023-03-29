@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioSource jumpSoundEffect;
     private bool playingInDesktop = true;
+    private GameplayUIController gameplayUIController;
     private void Awake()
     {
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         mybody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+        gameplayUIController = FindObjectOfType<GameplayUIController>();
     }
     // Start is called before the first frame update
     void Start()
@@ -114,6 +116,11 @@ public class Player : MonoBehaviour
 
     private void DestroyAndGameOverSound()
     {
+        if (gameplayUIController != null)
+        {
+            gameplayUIController.showGameOverUI();
+        }
+        Time.timeScale = 0f;
         GameManager.instance.GameOverSoundEffect.Play();
         ScoreManager.instance.saveScore();
         Destroy(gameObject);
@@ -121,7 +128,6 @@ public class Player : MonoBehaviour
 
     private void PlayerMovementButtonClickedListener(string buttonName)
     {
-        Debug.Log(buttonName + " is pressed.");
         switch (buttonName)
         {
             case "left":
