@@ -37,18 +37,20 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MovementController.playerMovementButtonClicked += PlayerMovementButtonClickedListener;
+        //MovementController.playerMovementButtonClicked += PlayerMovementButtonClickedListener;
+        JoystickController.joystickMoved += PlayerMovementButtonClickedListener;
     }
     private void OnDestroy()
     {
-        MovementController.playerMovementButtonClicked -= PlayerMovementButtonClickedListener;
+        //MovementController.playerMovementButtonClicked -= PlayerMovementButtonClickedListener;
+        JoystickController.joystickMoved -= PlayerMovementButtonClickedListener;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // enable it for keyboard player
         PlayerMoveKeyboard();
-        AnimatePlayer();
     }
     private void FixedUpdate()
     {
@@ -60,8 +62,8 @@ public class Player : MonoBehaviour
         if (playingInDesktop)
         {
             movementX = Input.GetAxisRaw("Horizontal");
+            MovePlayer();
         }
-        MovePlayer();
     }
     void AnimatePlayer()
     {
@@ -143,6 +145,7 @@ public class Player : MonoBehaviour
                 break;
             default:
                 movementX = 0;
+                MovePlayer();
                 break;
         }
     }

@@ -10,18 +10,17 @@ public class MovementController : MonoBehaviour
     private GameObject movementController;
     private void Awake()
     {
-        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+       /* if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
             movementController.SetActive(true);
         }
         else
         {
             movementController.SetActive(false);
-        }
+        }*/
     }
     public void LeftButtonClicked()
     {
-        Debug.Log("LeftButtonClicked");
         MoveButtonClicked("left");
     }
     public void RightButtonClicked()
@@ -38,7 +37,6 @@ public class MovementController : MonoBehaviour
     }
     private void MoveButtonClicked(string buttonName)
     {
-        Debug.Log(playerMovementButtonClicked);
         if (playerMovementButtonClicked != null)
         {
             playerMovementButtonClicked(buttonName);
